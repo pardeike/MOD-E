@@ -5,6 +5,10 @@
 	<targetVersion>0.17.0</targetVersion>
 	<description>If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
 
+Installation: Put it at the TOP of the mod list. Above the Core mod.
+
+Usage: After installing the mod, try loading a saved game where you have all the mods but in the wrong order or some of them not enabled correctly. A new button will appear in the warning dialog that allows you to fix the mod list. Clicking it will adjust the mod list and restart RimWorld. Now you can load the save game without any errors.
+
 Powered by Harmony Patch Library
 
 Andreas Pardeike
