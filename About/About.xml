@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>MOD-E</name>
+	<author>Andreas Pardeike</author>
+	<targetVersion>0.17.0</targetVersion>
+	<description>If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
+
+Powered by Harmony Patch Library
+
+Andreas Pardeike
+Email: andreas@pardeike.net
+Steam: pardeike
+Twitter: @pardeike</description>
+</ModMetaData>
