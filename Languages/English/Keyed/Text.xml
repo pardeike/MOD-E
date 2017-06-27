@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 	<FixThoseMods>Fix my mod list</FixThoseMods>
+	<CannotGetModList>Cannot get the mod list</CannotGetModList>
+	<TheseModsAreMissing>The following mods are missing completely and MOD-E will not work until you have installed them:\n\n{0}</TheseModsAreMissing>
 </LanguageData>

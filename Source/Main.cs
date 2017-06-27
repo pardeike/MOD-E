@@ -14,7 +14,6 @@ namespace MOD_E
 		{
 			MyOwnIdentifier = content.Identifier;
 
-			HarmonyInstance.DEBUG = true;
 			var harmony = HarmonyInstance.Create("net.pardeike.MOD-E");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 		}
@@ -59,8 +58,12 @@ namespace MOD_E
 					}
 					else
 					{
-						Log.Error(error);
-						// TODO handle or display error
+						LongEventHandler.QueueLongEvent(delegate
+						{
+							var title = "ModsMismatchWarningTitle".Translate();
+							Find.WindowStack.Add(new Dialog_MessageBox(error, "OK".Translate(), null, null, null, title, false));
+						},
+						"", true, null);
 					}
 				}
 			}

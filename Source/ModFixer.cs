@@ -14,22 +14,23 @@ namespace MOD_E
 		{
 			if (ScribeMetaHeaderUtility.loadedModIdsList == null)
 			{
-				error = "Cannot get mod list";
+				error = "CannotGetModList".Translate();
 				return false;
 			}
+
+			var missingMods = new List<String>();
 			var modIDs = new List<String>(ScribeMetaHeaderUtility.loadedModIdsList);
 			foreach (var modID in modIDs)
 			{
-				Log.Warning("#" + modID + "#");
-
 				var metaData = GetModMetaData(modID);
 				if (metaData == null)
-				{
-					error = "Cannot get meta data for mod " + modID;
-					return false;
-				}
-				// Log.Error("MOD " + metaData.Name + "(" + metaData.Identifier + ") active = " 
-				//           + (metaData.Active ? "yes" : "no") + " core = " + (metaData.IsCoreMod ? "yes" : "no"));
+					missingMods.Add(modID);
+			}
+
+			if (missingMods.Count > 0)
+			{
+				error = "TheseModsAreMissing".Translate(String.Join(", ", missingMods.ToArray()));
+				return false;
 			}
 
 			error = null;
