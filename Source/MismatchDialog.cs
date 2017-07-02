@@ -19,7 +19,6 @@ namespace MOD_E
 		private float creationRealTime = -1f;
 
 		public override Vector2 InitialSize { get { return new Vector2(640f, 460f); } }
-		private float TimeUntilInteractive { get { return creationRealTime - Time.realtimeSinceStartup; } }
 
 		public MismatchDialog(String text, Action defaultAction)
 		{
@@ -57,8 +56,8 @@ namespace MOD_E
 			Rect outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - 5f - verticalPos);
 			float width = outRect.width - 16f;
 			Rect viewRect = new Rect(0f, 0f, width, Text.CalcHeight(text, width));
-			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect, true);
-			Widgets.Label(new Rect(0f, 0f, viewRect.width, viewRect.height), this.text);
+			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+			Widgets.Label(new Rect(0f, 0f, viewRect.width, viewRect.height), text);
 			Widgets.EndScrollView();
 
 			AddButton(inRect, 1, "GoBack", delegate { Close(true); }, false);

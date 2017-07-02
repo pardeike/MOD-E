@@ -3,6 +3,7 @@ using System;
 using System.Reflection;
 using Harmony;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MOD_E
 {
@@ -48,32 +49,27 @@ namespace MOD_E
 				String currentModsSummary;
 				if (!ScribeMetaHeaderUtility.LoadedModsMatchesActiveMods(out loadedModsSummary, out currentModsSummary))
 				{
-					String error;
-					if (ModFixer.CanFixMods(out error))
+					var missing = ModFixer.MissingModsInfo();
+
+					if (missing.Count == 0)
 					{
 						var modInfoText = "ModsMismatchWarningText".Translate(new object[] { loadedModsSummary, currentModsSummary });
-						ShowDialog(modInfoText, confirmedAction);
-						__result = true;
-						return false;
+						Find.WindowStack.Add(new MismatchDialog(modInfoText, confirmedAction));
 					}
 					else
 					{
-						LongEventHandler.QueueLongEvent(delegate
+						Find.WindowStack.Add(new MissingModsDialog(missing, delegate
 						{
-							var title = "ModsMismatchWarningTitle".Translate();
-							Find.WindowStack.Add(new Dialog_MessageBox(error, "OK".Translate(), null, null, null, title, false));
-						},
-						"", true, null);
+							var modInfoText = "ModsMismatchWarningText".Translate(new object[] { loadedModsSummary, currentModsSummary });
+							Find.WindowStack.Add(new MismatchDialog(modInfoText, confirmedAction));
+						}));
 					}
+
+					__result = true;
+					return false;
 				}
 			}
 			return true;
-		}
-
-		static void ShowDialog(String text, Action confirmedAction)
-		{
-			var dialog = new MismatchDialog(text, confirmedAction);
-			Find.WindowStack.Add(dialog);
 		}
 	}
 }

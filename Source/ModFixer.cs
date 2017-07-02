@@ -1,40 +1,89 @@
 ﻿using Harmony;
+using Steamworks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
+using Verse.Steam;
 
 namespace MOD_E
 {
+	public class ModIdAndName
+	{
+		public string id;
+		public string name;
+
+		public ModIdAndName(string id, string name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+	}
+
 	public static class ModFixer
 	{
 		static Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(String) });
 		public static ModMetaData GetModMetaData(String modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID); }
 
-		public static bool CanFixMods(out String error)
+		static List<ModIdAndName> missingMods;
+
+		public static bool SteamIsAvailable()
 		{
-			if (ScribeMetaHeaderUtility.loadedModIdsList == null)
-			{
-				error = "CannotGetModList".Translate();
-				return false;
-			}
+			var steamManagerType = AccessTools.TypeByName("Verse.Steam.SteamManager");
+			if (steamManagerType == null) return false;
+			var initializedProp = AccessTools.Property(steamManagerType, "Initialized");
+			if (initializedProp == null) return false;
+			return SteamManager.Initialized;
+		}
 
-			var missingMods = new List<String>();
+		public static List<ModIdAndName> MissingModsInfo()
+		{
+			//if (SteamIsAvailable())
+			//{
+			//	var numSub = SteamUGC.GetNumSubscribedItems();
+			//	var array = new PublishedFileId_t[numSub];
+			//	var count = (int)SteamUGC.GetSubscribedItems(array, numSub);
+			//	var subscribedMods = array.ToList()
+			//		.GetRange(0, count)
+			//		.Select(pfid => pfid.m_PublishedFileId)
+			//		.ToList();
+
+			//	var changed = false;
+			//	foreach (var modID in ScribeMetaHeaderUtility.loadedModIdsList)
+			//	{
+			//		var metaData = GetModMetaData(modID);
+			//		if (metaData == null)
+			//		{
+			//			ulong steamID;
+			//			if (ulong.TryParse(modID, out steamID) && subscribedMods.Contains(steamID) == false)
+			//			{
+			//				Log.Warning("Auto subscribing to steam workshop mod " + steamID);
+			//				var pfid = new PublishedFileId_t(steamID);
+			//				SteamUGC.SubscribeItem(pfid);
+			//				changed = true;
+			//			}
+			//		}
+			//	}
+			//	if (changed)
+			//	{
+			//		Log.Warning("Rebuilding workshop items");
+			//		Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+			//		Log.Warning("Done");
+			//	}
+			//}
+
+			missingMods = new List<ModIdAndName>();
 			var modIDs = new List<String>(ScribeMetaHeaderUtility.loadedModIdsList);
-			foreach (var modID in modIDs)
+			var modNames = new List<String>(ScribeMetaHeaderUtility.loadedModNamesList);
+			for (int i = 0; i < Math.Min(modIDs.Count, modNames.Count); i++)
 			{
-				var metaData = GetModMetaData(modID);
+				var mod = new ModIdAndName(modIDs[i], modNames[i]);
+
+				var metaData = GetModMetaData(mod.id);
 				if (metaData == null)
-					missingMods.Add(modID);
+					missingMods.Add(mod);
 			}
-
-			if (missingMods.Count > 0)
-			{
-				error = "TheseModsAreMissing".Translate(String.Join(", ", missingMods.ToArray()));
-				return false;
-			}
-
-			error = null;
-			return true;
+			return missingMods;
 		}
 
 		public static void FixMods()
@@ -45,6 +94,28 @@ namespace MOD_E
 			Traverse.Create(typeof(ModsConfig)).Field("data").Field("activeMods").SetValue(modIDs);
 			ModsConfig.Save();
 			GenCommandLine.Restart();
+		}
+
+		public static void SubscribeMod(ulong steamID)
+		{
+			SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+			Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+		}
+
+		public static void SubscribeAllMods()
+		{
+			var changed = false;
+			foreach (var mod in missingMods)
+			{
+				ulong steamID;
+				if (ulong.TryParse(mod.id, out steamID))
+				{
+					SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+					changed = true;
+				}
+			}
+			if (changed)
+				Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
 		}
 	}
 }
