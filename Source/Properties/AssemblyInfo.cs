@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MOD-E")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sync mod list to loaded save games")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Andreas Pardeike")]
 [assembly: AssemblyProduct("MOD-E")]

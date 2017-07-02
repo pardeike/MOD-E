@@ -22,7 +22,7 @@ namespace MOD_E
 
 	[HarmonyPatch(typeof(ScribeMetaHeaderUtility))]
 	[HarmonyPatch("ModListsMatch")]
-	static class _Patch
+	static class ScribeMetaHeaderUtility_ModListsMatch_Patch
 	{
 		static void Prefix(ref List<string> a, ref List<string> b)
 		{
@@ -33,6 +33,19 @@ namespace MOD_E
 			var b2 = new List<string>(b);
 			b2.RemoveAll(modID => modID == MOD_E_Main.MyOwnIdentifier);
 			b = b2;
+		}
+	}
+
+	[HarmonyPatch(typeof(ModsConfig))]
+	[HarmonyPatch("Reset")]
+	static class ModsConfig_Reset_Patch
+	{
+		static void Postfix()
+		{
+			var modIDs = Traverse.Create(typeof(ModsConfig)).Field("data").Field("activeMods").GetValue<List<string>>();
+			modIDs.RemoveAll(modID => modID == MOD_E_Main.MyOwnIdentifier);
+			modIDs.Insert(0, MOD_E_Main.MyOwnIdentifier);
+			ModsConfig.Save();
 		}
 	}
 
