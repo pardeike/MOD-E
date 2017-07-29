@@ -12,15 +12,15 @@ namespace MOD_E
 		private const float buttonCount = 3f;
 		private const float buttonSpacing = 20f;
 
-		public String text;
+		public string text;
 		public Action defaultAction;
 
 		private Vector2 scrollPosition = Vector2.zero;
 		private float creationRealTime = -1f;
 
-		public override Vector2 InitialSize { get { return new Vector2(640f, 460f); } }
+		public override Vector2 InitialSize => new Vector2(640f, 460f);
 
-		public MismatchDialog(String text, Action defaultAction)
+		public MismatchDialog(string text, Action defaultAction)
 		{
 			this.text = text;
 			this.defaultAction = defaultAction;
@@ -32,7 +32,7 @@ namespace MOD_E
 			onlyOneOfTypeAllowed = false;
 		}
 
-		private void AddButton(Rect inRect, int index, String label, Action action, bool dangerous)
+		private void AddButton(Rect inRect, int index, string label, Action action, bool dangerous)
 		{
 			GUI.color = dangerous ? new Color(1f, 0.3f, 0.35f) : Color.white;
 			var buttonWidth = (inRect.width - (buttonCount - 1) * buttonSpacing) / buttonCount;
@@ -46,16 +46,16 @@ namespace MOD_E
 
 		public override void DoWindowContents(Rect inRect)
 		{
-			float verticalPos = inRect.y;
+			var verticalPos = inRect.y;
 
 			Text.Font = GameFont.Medium;
 			Widgets.Label(new Rect(0f, verticalPos, inRect.width, TitleHeight), "ModsMismatchWarningTitle".Translate());
 			verticalPos += TitleHeight;
 
 			Text.Font = GameFont.Small;
-			Rect outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - 5f - verticalPos);
-			float width = outRect.width - 16f;
-			Rect viewRect = new Rect(0f, 0f, width, Text.CalcHeight(text, width));
+			var outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - 5f - verticalPos);
+			var width = outRect.width - 16f;
+			var viewRect = new Rect(0f, 0f, width, Text.CalcHeight(text, width));
 			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
 			Widgets.Label(new Rect(0f, 0f, viewRect.width, viewRect.height), text);
 			Widgets.EndScrollView();

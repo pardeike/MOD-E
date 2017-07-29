@@ -2,28 +2,39 @@
 using Steamworks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 using Verse.Steam;
 
 namespace MOD_E
 {
-	public class ModIdAndName
+	public class ModIdAndName : IExposable
 	{
 		public string id;
 		public string name;
+
+		public ModIdAndName()
+		{
+			id = "";
+			name = "";
+		}
 
 		public ModIdAndName(string id, string name)
 		{
 			this.id = id;
 			this.name = name;
 		}
+
+		public void ExposeData()
+		{
+			Scribe_Values.Look(ref id, "id");
+			Scribe_Values.Look(ref name, "name");
+		}
 	}
 
 	public static class ModFixer
 	{
-		static Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(String) });
-		public static ModMetaData GetModMetaData(String modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID); }
+		static Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(string) });
+		public static ModMetaData GetModMetaData(string modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID); }
 
 		static List<ModIdAndName> missingMods;
 
@@ -73,10 +84,13 @@ namespace MOD_E
 			//}
 
 			missingMods = new List<ModIdAndName>();
-			var modIDs = new List<String>(ScribeMetaHeaderUtility.loadedModIdsList);
-			var modNames = new List<String>(ScribeMetaHeaderUtility.loadedModNamesList);
-			for (int i = 0; i < Math.Min(modIDs.Count, modNames.Count); i++)
+			var modIDs = new List<string>(ScribeMetaHeaderUtility.loadedModIdsList);
+			var modNames = new List<string>(ScribeMetaHeaderUtility.loadedModNamesList);
+			for (var i = 0; i < Math.Min(modIDs.Count, modNames.Count); i++)
 			{
+				if (MOD_E_Main.Settings.IsIgnored(modIDs[i], modNames[i]))
+					continue;
+
 				var mod = new ModIdAndName(modIDs[i], modNames[i]);
 
 				var metaData = GetModMetaData(mod.id);
@@ -88,7 +102,7 @@ namespace MOD_E
 
 		public static void FixMods()
 		{
-			var modIDs = new List<String>(ScribeMetaHeaderUtility.loadedModIdsList);
+			var modIDs = new List<string>(ScribeMetaHeaderUtility.loadedModIdsList);
 			modIDs.RemoveAll(modID => modID == MOD_E_Main.MyOwnIdentifier);
 			modIDs.Insert(0, MOD_E_Main.MyOwnIdentifier);
 			Traverse.Create(typeof(ModsConfig)).Field("data").Field("activeMods").SetValue(modIDs);

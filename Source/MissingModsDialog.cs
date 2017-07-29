@@ -2,7 +2,6 @@
 using Steamworks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Verse;
 using Verse.Steam;
@@ -19,13 +18,13 @@ namespace MOD_E
 		private Action defaultAction;
 
 		public List<ModIdAndName> mods;
-		public String title;
-		public String header;
+		public string title;
+		public string header;
 
 		private Vector2 scrollPosition = Vector2.zero;
 		private float creationRealTime = -1f;
 
-		public override Vector2 InitialSize { get { return new Vector2(640f, 460f); } }
+		public override Vector2 InitialSize => new Vector2(640f, 460f);
 
 		public MissingModsDialog(List<ModIdAndName> mods, Action defaultAction)
 		{
@@ -42,13 +41,40 @@ namespace MOD_E
 			onlyOneOfTypeAllowed = false;
 		}
 
-		private void AddButton(Rect inRect, int index, String label, Action action, bool dangerous)
+		private void AddButton(Rect inRect, int index, string label, Action action, bool dangerous)
 		{
 			GUI.color = dangerous ? new Color(1f, 0.3f, 0.35f) : Color.white;
 			var buttonWidth = (inRect.width - (buttonCount - 1) * defaultSpacing) / buttonCount;
 			var rect = new Rect((index - 1) * (buttonWidth + defaultSpacing), inRect.height - ButtonHeight, buttonWidth, ButtonHeight);
 			if (Widgets.ButtonText(rect, label.Translate(), true, false, true))
 				action();
+		}
+
+		private void IgnoreMod(ModIdAndName mod)
+		{
+			if (MOD_E_Main.Settings.ShowIgnoreConfirmation == false)
+			{
+				MOD_E_Main.Settings.AddIgnoredMod(mod);
+				return;
+			}
+
+			var confirmDialog = new Smaller_Dialog_MessageBox(
+				"PermanentIgnoreWarning".Translate(),
+				"Ignore".Translate(),
+				delegate
+				{
+					MOD_E_Main.Settings.ShowIgnoreConfirmation = false;
+					MOD_E_Main.Settings.Write();
+
+					MOD_E_Main.Settings.AddIgnoredMod(mod);
+				},
+				"GoBack".Translate(),
+				null,
+				"MOD-E",
+				true
+			);
+
+			Find.WindowStack.Add(confirmDialog);
 		}
 
 		private float AddMods(Rect contentRect, bool render, out bool hasSubscribeAll, out bool allModsResolved)
@@ -64,14 +90,12 @@ namespace MOD_E
 			var labelSubscribe = "SubscribeSteamButtonLabel".Translate();
 			var labelInstalled = "Installed".Translate();
 			var labelDownloading = "Downloading".Translate();
-			var labelOpenSteam = "OpenSteamButtonLabel".Translate();
-			var labelSearchForum = "SearchForumButtonLabel".Translate();
+			var labelMarkAsIgnored = "MarkAsIgnoredButtonLabel".Translate();
 			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelSubscribe).x);
 			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelInstalled).x);
 			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelDownloading).x);
-			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelOpenSteam).x);
-			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelSearchForum).x);
-			buttonWidth += 4 * rowSpacing;
+			buttonWidth = Math.Max(buttonWidth, Text.CalcSize(labelMarkAsIgnored).x);
+			buttonWidth += 8 * rowSpacing;
 
 			var steamIsAvailable = ModFixer.SteamIsAvailable();
 
@@ -89,9 +113,11 @@ namespace MOD_E
 			}
 
 			var descColumnWidth = contentRect.width - buttonWidth - defaultSpacing - buttonWidth - defaultSpacing;
-			for (int i = 0; i < mods.Count; i++)
+			for (var i = 0; i < mods.Count; i++)
 			{
 				var mod = mods[i];
+				if (MOD_E_Main.Settings.IsIgnored(mod))
+					continue;
 
 				ulong steamID;
 				if (ulong.TryParse(mod.id, out steamID) == false)
@@ -111,16 +137,20 @@ namespace MOD_E
 
 				if (render)
 				{
-					Rect rect = new Rect(0f, verticalPos, descColumnWidth, rowHeight);
+					var rect = new Rect(0f, verticalPos, descColumnWidth, rowHeight);
 					var vpos = verticalPos + (rowHeight - ButtonHeight) / 2;
 
 					var anchor = Text.Anchor;
 					Text.Anchor = TextAnchor.MiddleLeft;
 					Widgets.Label(rect, description);
 					Text.Anchor = anchor;
+					Widgets.DrawHighlightIfMouseover(rect);
 
 					if (steamID > 0)
 					{
+						if (Widgets.ButtonInvisible(rect, true))
+							SteamUtility.OpenWorkshopPage(new PublishedFileId_t(steamID));
+
 						if (steamIsAvailable)
 						{
 							if (modsInstalled.Contains(steamID))
@@ -152,25 +182,28 @@ namespace MOD_E
 									ModFixer.SubscribeMod(steamID);
 								GUI.color = oldColor;
 
+								rect = new Rect(descColumnWidth + defaultSpacing + buttonWidth + defaultSpacing, vpos, buttonWidth, ButtonHeight);
+								if (Widgets.ButtonText(rect, labelMarkAsIgnored, true, false, true))
+									IgnoreMod(mod);
+
 								hasSubscribeAll = true;
 								allModsResolved = false;
 							}
-
-							rect = new Rect(descColumnWidth + defaultSpacing + buttonWidth + defaultSpacing, vpos, buttonWidth, ButtonHeight);
-							if (Widgets.ButtonText(rect, labelOpenSteam, true, false, steamIsAvailable))
-								SteamUtility.OpenWorkshopPage(new PublishedFileId_t(steamID));
 						}
 					}
 					else
 					{
-						rect = new Rect(descColumnWidth + defaultSpacing + buttonWidth + defaultSpacing, vpos, buttonWidth, ButtonHeight);
-						if (Widgets.ButtonText(rect, labelSearchForum, true, false, true))
+						if (Widgets.ButtonInvisible(rect, true))
 						{
 							var term = WWW.EscapeURL(mod.name);
 							var url = "https://ludeon.com/forums/index.php?action=search2&advanced=1&searchtype=1&sort=relevance|desc&brd[15]=15&brd[16]=16&search=" + term;
 							Application.OpenURL(url);
 							//SteamUtility.OpenUrl(url);
 						}
+
+						rect = new Rect(descColumnWidth + defaultSpacing + buttonWidth + defaultSpacing, vpos, buttonWidth, ButtonHeight);
+						if (Widgets.ButtonText(rect, labelMarkAsIgnored, true, false, true))
+							IgnoreMod(mod);
 						allModsResolved = false;
 					}
 				}
@@ -198,9 +231,9 @@ namespace MOD_E
 			bool hasSubscribeAll, allModsResolved;
 
 			Text.Font = GameFont.Small;
-			Rect outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - defaultSpacing - 5f - verticalPos);
-			float width = outRect.width - 16f;
-			Rect viewRect = new Rect(0f, 0f, width, 0f);
+			var outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - defaultSpacing - 5f - verticalPos);
+			var width = outRect.width - 16f;
+			var viewRect = new Rect(0f, 0f, width, 0f);
 			viewRect.height = AddMods(viewRect, false, out hasSubscribeAll, out allModsResolved);
 			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
 			AddMods(viewRect, true, out hasSubscribeAll, out allModsResolved);
@@ -214,5 +247,14 @@ namespace MOD_E
 			else
 				AddButton(inRect, 3, "GoBack", delegate { Close(true); }, false);
 		}
+	}
+
+	internal class Smaller_Dialog_MessageBox : Dialog_MessageBox
+	{
+		public Smaller_Dialog_MessageBox(string text, string buttonAText, Action buttonAAction, string buttonBText, Action buttonBAction, string title, bool buttonADestructive) : base(text, buttonAText, buttonAAction, buttonBText, buttonBAction, title, buttonADestructive)
+		{
+		}
+
+		public override Vector2 InitialSize => new Vector2(360f, 230f);
 	}
 }

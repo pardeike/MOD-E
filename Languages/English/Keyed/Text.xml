@@ -2,9 +2,10 @@
 <LanguageData>
 	<FixThoseMods>Fix my mod list</FixThoseMods>
 	<ModsMissingTitle>Missing mods</ModsMissingTitle>
-	<ModsMissingText>The following mods are missing completely and MOD-E can not fix your mod list until you have installed them:</ModsMissingText>
+	<ModsMissingText>The following mods are missing completely and MOD-E can not fix your mod list until you have resolved the list. Install mods from steam or by downloading them manually or mark them as permanently ignored:</ModsMissingText>
 	<SubscribeSteamButtonLabel>Subscribe</SubscribeSteamButtonLabel>
-	<OpenSteamButtonLabel>Open Steam</OpenSteamButtonLabel>
-	<SearchForumButtonLabel>Search Forum</SearchForumButtonLabel>
 	<SubscribeToAllButtonLabel>Subscribe to All</SubscribeToAllButtonLabel>
+	<MarkAsIgnoredButtonLabel>Ignore</MarkAsIgnoredButtonLabel>
+	<PermanentlyIgnoredModsList>Permanently ignored mods</PermanentlyIgnoredModsList>
+	<PermanentIgnoreWarning>Do you want to permanently ignore this mod?\n\nNote: you can edit the ignore list at any time in the global MOD-E settings.</PermanentIgnoreWarning>
 </LanguageData>
