@@ -2,7 +2,7 @@
 <ModMetaData>
 	<name>MOD-E</name>
 	<author>Andreas Pardeike</author>
-	<targetVersion>0.17.0</targetVersion>
+	<targetVersion>0.18.0</targetVersion>
 	<description>If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
 
 Installation: Put it at the TOP of the mod list. Above the Core mod.
