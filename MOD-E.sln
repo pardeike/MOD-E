@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOD-E", "MOD-E.csproj", "{B0D46BB5-08FF-4E04-9EFD-3E32E38A9CC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOD-E", "Source\MOD-E.csproj", "{B0D46BB5-08FF-4E04-9EFD-3E32E38A9CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +18,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BBBF119-0F1F-43F3-9492-1EA97C85E027}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

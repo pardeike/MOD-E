@@ -36,7 +36,6 @@ namespace MOD_E
 
 			forcePause = true;
 			absorbInputAroundWindow = true;
-			closeOnEscapeKey = true;
 			creationRealTime = RealTime.LastRealTime;
 			onlyOneOfTypeAllowed = false;
 		}
