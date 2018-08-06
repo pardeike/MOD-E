@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B0D46BB5-08FF-4E04-9EFD-3E32E38A9CC2}</ProjectGuid>
+    <ProjectGuid>{1D157382-8C12-46A7-A5C2-C49AECD14063}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MOD_E</RootNamespace>
@@ -48,10 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="0Harmony, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Harmony\Harmony\bin\Release\net35\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -72,8 +71,11 @@
       <Link>Text.xml</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(ProjectDir)Install.bat" $(ConfigurationName) "$(SolutionDir)" "$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>"$(ProjectDir)Install.bat" $(ConfigurationName) "$(ProjectDir)" "$(ProjectName)" "About Assemblies Languages"</PostBuildEvent>
   </PropertyGroup>
 </Project>

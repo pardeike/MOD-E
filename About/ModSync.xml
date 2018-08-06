@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModSyncNinjaData>
+  <ID>4e6082da-1178-4f64-a444-9a32aab3b4f1</ID>
+  <ModName>MOD-E</ModName>
+  <Version>1.0.6.0</Version>
+  <SaveBreaking>False</SaveBreaking>
+  <Host name="Github">
+    <Owner>pardeike</Owner>
+    <Project>MOD-E</Project>
+    <AboutDir>About</AboutDir>
+    <DownloadFrom>ModSyncMainPage</DownloadFrom>
+    <Branch>master</Branch>
+  </Host>
+</ModSyncNinjaData>
