@@ -43,6 +43,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="MissingModsDialog.cs" />
     <Compile Include="MismatchDialog.cs" />
+    <Compile Include="ModCounter.cs" />
     <Compile Include="ModFixer.cs" />
     <Compile Include="ModSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

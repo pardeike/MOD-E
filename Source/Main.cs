@@ -1,9 +1,9 @@
-﻿using Verse;
+﻿using Harmony;
 using System;
-using System.Reflection;
-using Harmony;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using Verse;
 
 namespace MOD_E
 {
@@ -29,6 +29,16 @@ namespace MOD_E
 		public override string SettingsCategory()
 		{
 			return "MOD-E";
+		}
+	}
+
+	[HarmonyPatch(typeof(Game))]
+	[HarmonyPatch("FinalizeInit")]
+	static class Game_FinalizeInit_Patch
+	{
+		static void Postfix()
+		{
+			ModCounter.Trigger();
 		}
 	}
 
