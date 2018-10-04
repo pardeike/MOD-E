@@ -46,6 +46,7 @@
     <Compile Include="ModCounter.cs" />
     <Compile Include="ModFixer.cs" />
     <Compile Include="ModSettings.cs" />
+    <Compile Include="MultiVersionModFix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
