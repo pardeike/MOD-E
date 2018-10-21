@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Manifest>
-    <identifier>net.pardeike.rimworld.mod.mod-e</identifier>
-    <version>1.0.7.0</version>
-    <targetVersions>
-        <li>0.19.0</li>
-        <li>1.0.0</li>
-    </targetVersions>
-    <dependencies>
-    </dependencies>
-    <incompatibleWith>
-    </incompatibleWith>
-    <loadBefore>
-        <li>Core</li>
-    </loadBefore>
-    <loadAfter>
-    </loadAfter>
-    <manifestUri>https://raw.githubusercontent.com/pardeike/MOD-E/master/About/Manifest.xml</manifestUri>
-    <downloadUri>https://github.com/pardeike/MOD-E/releases/latest</downloadUri>
+  <identifier>net.pardeike.rimworld.mod.mod-e</identifier>
+  <version>1.0.8.0</version>
+  <targetVersions>
+    <li>0.19.0</li>
+    <li>1.0.0</li>
+  </targetVersions>
+  <dependencies>
+  </dependencies>
+  <incompatibleWith>
+  </incompatibleWith>
+  <loadBefore>
+    <li>Core</li>
+  </loadBefore>
+  <loadAfter>
+  </loadAfter>
+  <manifestUri>https://raw.githubusercontent.com/pardeike/MOD-E/master/About/Manifest.xml</manifestUri>
+  <downloadUri>https://github.com/pardeike/MOD-E/releases/latest</downloadUri>
 </Manifest>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>{{modname}}</name>
+	<author>Andreas Pardeike</author>
+	<targetVersion>{{target}}</targetVersion>
+	<description>###DESCRIPTION###
+
+Agreement
+When you download and use this mod, you agree to the fact that my mods all connect to a central server to count anonymously how many times you start a game with them. No personal information is transferred in any way, no connection information is stored (the cloud I use does not expose this to me). The purpose is solely for keeping track of how much my mods are used.
+
+If you like this mod, check out my other mods on Steam or GitHub:
+https://steamcommunity.com/id/brrainz/myworkshopfiles/
+https://github.com/pardeike?tab=repositories
+
+Please support me on Patreon, it would mean a lot to me:
+https://www.patreon.com/pardeike
+
+Powered by Harmony Patch Library
+https://github.com/pardeike/Harmony
+
+Andreas Pardeike
+Email: andreas@pardeike.net
+Steam: pardeike
+Twitter: @pardeike</description>
+</ModMetaData>

@@ -15,14 +15,14 @@ namespace MOD_E
 		private const float buttonCount = 3f;
 		private const float defaultSpacing = 20f;
 
-		private Action defaultAction;
+		private readonly Action defaultAction;
 
 		public List<ModIdAndName> mods;
 		public string title;
 		public string header;
 
 		private Vector2 scrollPosition = Vector2.zero;
-		private float creationRealTime = -1f;
+		private readonly float creationRealTime = -1f;
 
 		public override Vector2 InitialSize => new Vector2(640f, 460f);
 
