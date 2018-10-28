@@ -2,6 +2,7 @@
 using Steamworks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Verse;
 using Verse.Steam;
 
@@ -112,24 +113,32 @@ namespace MOD_E
 
 		public static void SubscribeMod(ulong steamID)
 		{
-			SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
-			Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+			new Thread(() =>
+			{
+				SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+				MissingModsDialog.rebuildList = true;
+			}).Start();
 		}
 
 		public static void SubscribeAllMods()
 		{
-			var changed = false;
-			foreach (var mod in missingMods)
+			var localMissingMods = missingMods.ToArray();
+			var currentThread = Thread.CurrentThread;
+			new Thread(() =>
 			{
-				ulong steamID;
-				if (ulong.TryParse(mod.id, out steamID))
+				var changed = false;
+				foreach (var mod in localMissingMods)
 				{
-					SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
-					changed = true;
+					ulong steamID;
+					if (ulong.TryParse(mod.id, out steamID))
+					{
+						SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+						changed = true;
+					}
 				}
-			}
-			if (changed)
-				Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+				if (changed)
+					MissingModsDialog.rebuildList = true;
+			}).Start();
 		}
 	}
 }

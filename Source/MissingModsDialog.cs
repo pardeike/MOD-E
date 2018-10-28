@@ -23,6 +23,7 @@ namespace MOD_E
 
 		private Vector2 scrollPosition = Vector2.zero;
 		private readonly float creationRealTime = -1f;
+		public static bool rebuildList = false;
 
 		public override Vector2 InitialSize => new Vector2(640f, 460f);
 
@@ -214,6 +215,12 @@ namespace MOD_E
 
 		public override void DoWindowContents(Rect inRect)
 		{
+			if (rebuildList)
+			{
+				Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+				rebuildList = false;
+			}
+
 			var height = 0f;
 			var verticalPos = inRect.y;
 
