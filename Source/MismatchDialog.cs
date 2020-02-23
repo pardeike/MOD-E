@@ -16,7 +16,6 @@ namespace MOD_E
 		public Action defaultAction;
 
 		private Vector2 scrollPosition = Vector2.zero;
-		private readonly float creationRealTime = -1f;
 
 		public override Vector2 InitialSize => new Vector2(640f, 460f);
 
@@ -27,7 +26,6 @@ namespace MOD_E
 
 			forcePause = true;
 			absorbInputAroundWindow = true;
-			creationRealTime = RealTime.LastRealTime;
 			onlyOneOfTypeAllowed = false;
 		}
 

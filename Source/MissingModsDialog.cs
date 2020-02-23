@@ -1,8 +1,9 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using Steamworks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using Verse;
 using Verse.Steam;
 
@@ -10,7 +11,6 @@ namespace MOD_E
 {
 	public class MissingModsDialog : Window
 	{
-		private const float ModRowHeight = 35f;
 		private const float ButtonHeight = 35f;
 		private const float buttonCount = 3f;
 		private const float defaultSpacing = 20f;
@@ -22,7 +22,6 @@ namespace MOD_E
 		public string header;
 
 		private Vector2 scrollPosition = Vector2.zero;
-		private readonly float creationRealTime = -1f;
 		public static bool rebuildList = false;
 
 		public override Vector2 InitialSize => new Vector2(640f, 460f);
@@ -37,7 +36,6 @@ namespace MOD_E
 
 			forcePause = true;
 			absorbInputAroundWindow = true;
-			creationRealTime = RealTime.LastRealTime;
 			onlyOneOfTypeAllowed = false;
 		}
 
@@ -50,7 +48,7 @@ namespace MOD_E
 				action();
 		}
 
-		private void IgnoreMod(ModIdAndName mod)
+		private static void IgnoreMod(ModIdAndName mod)
 		{
 			if (MOD_E_Main.Settings.ShowIgnoreConfirmation == false)
 			{
@@ -119,8 +117,7 @@ namespace MOD_E
 				if (MOD_E_Main.Settings.IsIgnored(mod))
 					continue;
 
-				ulong steamID;
-				if (ulong.TryParse(mod.id, out steamID) == false)
+				if (ulong.TryParse(mod.id, out var steamID) == false)
 					steamID = 0;
 
 				var description = mod.name;
@@ -195,7 +192,7 @@ namespace MOD_E
 					{
 						if (Widgets.ButtonInvisible(rect, true))
 						{
-							var term = WWW.EscapeURL(mod.name);
+							var term = UnityWebRequest.EscapeURL(mod.name);
 							var url = "https://ludeon.com/forums/index.php?action=search2&advanced=1&searchtype=1&sort=relevance|desc&brd[15]=15&brd[16]=16&search=" + term;
 							Application.OpenURL(url);
 							//SteamUtility.OpenUrl(url);
@@ -217,7 +214,7 @@ namespace MOD_E
 		{
 			if (rebuildList)
 			{
-				Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
+				_ = Traverse.Create(typeof(WorkshopItems)).Method("RebuildItemsList").GetValue();
 				rebuildList = false;
 			}
 
@@ -234,15 +231,13 @@ namespace MOD_E
 			Widgets.Label(new Rect(0f, verticalPos, inRect.width, height), header);
 			verticalPos += height + defaultSpacing;
 
-			bool hasSubscribeAll, allModsResolved;
-
 			Text.Font = GameFont.Small;
 			var outRect = new Rect(inRect.x, verticalPos, inRect.width, inRect.height - ButtonHeight - defaultSpacing - 5f - verticalPos);
 			var width = outRect.width - 16f;
 			var viewRect = new Rect(0f, 0f, width, 0f);
-			viewRect.height = AddMods(viewRect, false, out hasSubscribeAll, out allModsResolved);
+			viewRect.height = AddMods(viewRect, false, out var hasSubscribeAll, out var allModsResolved);
 			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
-			AddMods(viewRect, true, out hasSubscribeAll, out allModsResolved);
+			_ = AddMods(viewRect, true, out hasSubscribeAll, out allModsResolved);
 			Widgets.EndScrollView();
 
 			if (hasSubscribeAll)

@@ -2,7 +2,11 @@
 <ModMetaData>
 	<name>MOD-E</name>
 	<author>Andreas Pardeike</author>
-	<targetVersion>1.0.0</targetVersion>
+	<supportedVersions>
+		<li>1.0</li>
+		<li>1.1</li>
+	</supportedVersions>
+	<packageId>brrainz.mode</packageId>
 	<description>If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
 
 Installation: Put it at the TOP of the mod list. Above the Core mod.

@@ -25,8 +25,7 @@ namespace MOD_E
 		{
 			return IgnoredMods.Any(mod2 =>
 			{
-				ulong steamID;
-				if (ulong.TryParse(mod.id, out steamID) == false)
+				if (ulong.TryParse(mod.id, out var steamID) == false)
 					return mod2.name == mod.name;
 				return mod2.id == mod.id;
 			});
@@ -59,8 +58,7 @@ namespace MOD_E
 
 		private static string GetDescription(ModIdAndName mod)
 		{
-			ulong steamID;
-			if (ulong.TryParse(mod.id, out steamID) == false)
+			if (ulong.TryParse(mod.id, out var steamID) == false)
 				steamID = 0;
 
 			var description = mod.name;

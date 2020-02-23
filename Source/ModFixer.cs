@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -34,8 +34,8 @@ namespace MOD_E
 
 	public static class ModFixer
 	{
-		static Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(string) });
-		public static ModMetaData GetModMetaData(string modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID); }
+		static readonly Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(string) });
+		public static ModMetaData GetModMetaData(string modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID, false); }
 
 		static List<ModIdAndName> missingMods;
 
@@ -104,9 +104,9 @@ namespace MOD_E
 		public static void FixMods()
 		{
 			var modIDs = new List<string>(ScribeMetaHeaderUtility.loadedModIdsList);
-			modIDs.RemoveAll(modID => modID == MOD_E_Main.MyOwnIdentifier);
+			_ = modIDs.RemoveAll(modID => modID == MOD_E_Main.MyOwnIdentifier);
 			modIDs.Insert(0, MOD_E_Main.MyOwnIdentifier);
-			Traverse.Create(typeof(ModsConfig)).Field("data").Field("activeMods").SetValue(modIDs);
+			_ = Traverse.Create(typeof(ModsConfig)).Field("data").Field("activeMods").SetValue(modIDs);
 			ModsConfig.Save();
 			GenCommandLine.Restart();
 		}
@@ -115,7 +115,7 @@ namespace MOD_E
 		{
 			new Thread(() =>
 			{
-				SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+				_ = SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
 				MissingModsDialog.rebuildList = true;
 			}).Start();
 		}
@@ -129,10 +129,9 @@ namespace MOD_E
 				var changed = false;
 				foreach (var mod in localMissingMods)
 				{
-					ulong steamID;
-					if (ulong.TryParse(mod.id, out steamID))
+					if (ulong.TryParse(mod.id, out var steamID))
 					{
-						SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
+						_ = SteamUGC.SubscribeItem(new PublishedFileId_t(steamID));
 						changed = true;
 					}
 				}
