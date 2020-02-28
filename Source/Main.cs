@@ -18,7 +18,7 @@ namespace MOD_E
 			Settings = GetSettings<MOD_E_Settings>();
 
 			var harmony = new Harmony("net.pardeike.MOD-E");
-			harmony.PatchAll(Assembly.GetExecutingAssembly());
+			harmony.PatchAll();
 		}
 
 		public override void DoSettingsWindowContents(Rect inRect)
