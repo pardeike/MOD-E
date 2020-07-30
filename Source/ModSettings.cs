@@ -39,7 +39,7 @@ namespace MOD_E
 
 		public void RemoveIgnoredMod(ModIdAndName mod)
 		{
-			IgnoredMods.Remove(mod);
+			_ = IgnoredMods.Remove(mod);
 			Write();
 		}
 

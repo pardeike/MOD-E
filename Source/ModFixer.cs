@@ -34,8 +34,7 @@ namespace MOD_E
 
 	public static class ModFixer
 	{
-		static readonly Traverse GetModWithIdentifier = Traverse.Create(typeof(ModLister)).Method("GetModWithIdentifier", new Type[] { typeof(string) });
-		public static ModMetaData GetModMetaData(string modID) { return GetModWithIdentifier.GetValue<ModMetaData>(modID, false); }
+		public static ModMetaData GetModMetaData(string modID) { return ModLister.GetModWithIdentifier(modID, false); }
 
 		static List<ModIdAndName> missingMods;
 
