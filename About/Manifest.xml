@@ -14,6 +14,6 @@
   </loadBefore>
   <loadAfter>
   </loadAfter>
-  <manifestUri>https://raw.githubusercontent.com/pardeike/MOD-E/master/About/Manifest.xml</manifestUri>
+  <manifestUri>https://raw.githubusercontent.com/pardeike/MOD-E/latest/About/Manifest.xml</manifestUri>
   <downloadUri>https://github.com/pardeike/MOD-E/releases/latest</downloadUri>
 </Manifest>
