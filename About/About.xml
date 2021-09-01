@@ -4,8 +4,11 @@
 	<author>Andreas Pardeike</author>
 	<supportedVersions>
 		<li>1.0</li>
+		<li>1.3</li>
 	</supportedVersions>
-	<description>If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
+	<description>1.3 Update: Because of longer SteamIDs nowadays you need to save your game once with MOD-E activated. Otherwise the SteamIDs won't be included in the savegame.
+	
+	If your current mod list can satisfy a loading game, this mod will ask you to reconfigure your current mod list to match the loading game automatically. After a restart, you are good to go!
 
 Installation: Put it at the TOP of the mod list. Above the Core mod.
 
